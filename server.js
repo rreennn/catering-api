@@ -18,31 +18,25 @@ mongoose
 // Test route
 app.get("/", (req, res) => res.send("Server is running"));
 
-// Start server
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-
 //route template carb
 const carbTemplateRoutes = require("./routes/carbTemplate");
 app.use("/api/carb", carbTemplateRoutes);
 
 //route user
-const userRoutes = require('./routes/user');
-app.use('/api/user', userRoutes);
-
+const userRoutes = require("./routes/user");
+app.use("/api/user", userRoutes);
 
 //route menu
-const menuRoutes = require('./routes/menu');
-app.use('/api/menu', menuRoutes);
+const menuRoutes = require("./routes/menu");
+app.use("/api/menu", menuRoutes);
 
 //route cart
-const cartRoutes = require('./routes/cart');
-app.use('/api/cart', cartRoutes);
+const cartRoutes = require("./routes/cart");
+app.use("/api/cart", cartRoutes);
 
 //route order
 const orderRoutes = require("./routes/order");
 app.use("/api/orders", orderRoutes);
-
 
 //route admin
 const adminOrderRoutes = require("./routes/adminOrder");
@@ -50,3 +44,10 @@ app.use("/api/admin", adminOrderRoutes);
 
 const adminDashboardRoutes = require("./routes/adminDashboard");
 app.use("/api/admin", adminDashboardRoutes);
+
+if (process.env.NODE_ENV !== "production") {
+  const PORT = process.env.PORT || 5000;
+  app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+}
+
+module.export = app;
