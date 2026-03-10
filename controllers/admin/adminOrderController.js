@@ -3,11 +3,15 @@ const Order = require("../../models/Order");
 //lihat semua order plus filter buat lihat perbulan
 exports.getAllOrders = async (req, res) => {
   try {
-    const { month, deliveryDate } = req.query;
+    const { month, deliveryDate, page = 1, limit = 10 } = req.query;
+
+    const pageNum = parseInt(page);
+    const limitNum = parseInt(limit);
+    const skip = (pageNum - 1) * limitNum;
 
     let filter = {};
 
-    // Filter berdasarkan bulan DELIVERY
+    // Filter bulan delivery
     if (month) {
       const start = new Date(`${month}-01`);
       const end = new Date(start);
@@ -16,7 +20,7 @@ exports.getAllOrders = async (req, res) => {
       filter["items.tanggal_delivery"] = { $gte: start, $lt: end };
     }
 
-    // Filter tanggal spesifik DELIVERY
+    // Filter tanggal spesifik delivery
     if (deliveryDate) {
       const start = new Date(deliveryDate);
       start.setHours(0, 0, 0, 0);
@@ -30,10 +34,20 @@ exports.getAllOrders = async (req, res) => {
     const orders = await Order.find(filter)
       .populate("items.menu")
       .populate("items.carb_dipilih")
-      .sort({ createdAt: -1 });
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limitNum);
+
+    const totalOrders = await Order.countDocuments(filter);
 
     res.set("Cache-Control", "s-maxage=120");
-    res.json(orders);
+
+    res.json({
+      orders,
+      currentPage: pageNum,
+      totalPages: Math.ceil(totalOrders / limitNum),
+      totalOrders,
+    });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
