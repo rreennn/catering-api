@@ -77,8 +77,8 @@ exports.getKitchenSummary = async (req, res) => {
       });
     });
 
-    res.json(summary);
     res.set("Cache-Control", "s-maxage=120");
+    res.json(summary);
   } catch (err) {
     console.error("getKitchenSummary error:", err);
     res.status(500).json({ message: err.message });

@@ -107,6 +107,7 @@ exports.getMyOrders = async (req, res) => {
 
     const total = await Order.countDocuments({ user: req.user.id });
 
+    res.set("Cache-Control", "s-maxage=120");
     res.json({
       orders,
       currentPage: page,

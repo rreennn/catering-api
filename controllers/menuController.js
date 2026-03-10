@@ -14,8 +14,8 @@ exports.getMenu = async (req, res) => {
 
     const menus = await Menu.find(filter).populate("carb_template");
 
-    res.json(menus);
     res.set("Cache-Control", "s-maxage=120");
+    res.json(menus);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

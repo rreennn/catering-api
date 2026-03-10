@@ -32,8 +32,8 @@ exports.getAllOrders = async (req, res) => {
       .populate("items.carb_dipilih")
       .sort({ createdAt: -1 });
 
-    res.json(orders);
     res.set("Cache-Control", "s-maxage=120");
+    res.json(orders);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -55,8 +55,8 @@ exports.getTodayOrders = async (req, res) => {
       .populate("items.carb_dipilih")
       .sort({ createdAt: 1 });
 
-    res.json(orders);
     res.set("Cache-Control", "s-maxage=120");
+    res.json(orders);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
