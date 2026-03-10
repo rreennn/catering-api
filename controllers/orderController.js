@@ -93,12 +93,26 @@ exports.checkoutCart = async (req, res) => {
 // ================= GET ORDER HISTORY USER =================
 exports.getMyOrders = async (req, res) => {
   try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 5;
+
+    const skip = (page - 1) * limit;
+
     const orders = await Order.find({ user: req.user.id })
-      .sort({ createdAt: -1 }) // terbaru di atas
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
       .populate("items.menu")
       .populate("items.carb_dipilih");
 
-    res.json(orders);
+    const total = await Order.countDocuments({ user: req.user.id });
+
+    res.json({
+      orders,
+      currentPage: page,
+      totalPages: Math.ceil(total / limit),
+      totalOrders: total,
+    });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
