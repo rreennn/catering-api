@@ -71,7 +71,7 @@ exports.checkoutCart = async (req, res) => {
         name: "Menu Catering",
       })),
       callbacks: {
-        finish: `http://localhost:5173/payment-success/ORDER-${order._id}`,
+        finish: `${process.env.WEB_URL}/payment-success/ORDER-${order._id}`,
       },
     };
 
@@ -150,7 +150,7 @@ exports.createPayment = async (req, res) => {
         name: "Menu Catering",
       })),
       callbacks: {
-        finish: `http://localhost:5173/payment-success/ORDER-${order._id}`,
+        finish: `${process.env.WEB_URL}/payment-success/ORDER-${order._id}`,
       },
     };
 
@@ -215,7 +215,7 @@ Pembayaran berhasil ✅
 Order ID: ${order._id}
 Total: Rp ${order.total_harga.toLocaleString()}
 Detail pesanan bisa kamu liat disini
-http://localhost:5173/payment-success/ORDER-${order._id}
+    ${process.env.WEB_URL}/payment-success/ORDER-${order._id}
 
 Pesanan kamu sedang diproses 🍽️
 Terima kasih sudah order 🙏
@@ -289,7 +289,7 @@ exports.checkoutGuest = async (req, res) => {
         name: "Menu Catering",
       })),
       callbacks: {
-        finish: `http://localhost:5173/payment-success/ORDER-${order._id}`,
+        finish: `${process.env.WEB_URL}/payment-success/ORDER-${order._id}`,
       },
     };
 
