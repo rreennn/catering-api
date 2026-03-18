@@ -13,7 +13,7 @@ exports.registerUser = async (req, res) => {
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
-        const user = new User({ nama, email, password: hashedPassword, role });
+        const user = new User({ nama, email, password: hashedPassword, role: "pelanggan" });
         await user.save();
 
         res.status(201).json({ 
@@ -23,6 +23,7 @@ exports.registerUser = async (req, res) => {
             role: user.role
         });
     } catch (err) {
+        console.error("Register error", err);
         res.status(500).json({ message: err.message });
     }
 };
